@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
-const Recipes = mongoose.model(
-  "meals",
+const recipeSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -35,8 +34,9 @@ const Recipes = mongoose.model(
       type: String,
       unique: true
     }
-  },
-  "recipes"
-)
+  }
+);
+
+const Recipes = mongoose.model("recipes", recipeSchema);
 
 module.exports = Recipes;

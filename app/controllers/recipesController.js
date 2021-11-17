@@ -13,7 +13,7 @@ exports.show = async (req, res) => {
 
 exports.add = async (req, res) => {
 
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
     const newRecipe = await Recipes.create({
