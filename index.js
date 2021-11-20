@@ -5,7 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const { trackUser, requireAuth } = require('./app/controllers/middleware/authMiddleware')
+const { trackUser, requireAuth } = require('./middleware/authMiddleware');
 
 const port = process.env.PORT || 5000;
 const app = express();

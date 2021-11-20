@@ -1,4 +1,5 @@
 const Users = require('../models/users');
+const { signUpErrors } = require('../../utils/errorsHandler');
 
 const bcrypt = require('bcrypt');
 
@@ -23,11 +24,12 @@ exports.signUp = async (req, res) => {
       email: req.body.email,
       password: hash
     });
-    res.json(newUser);
+    res.status(200).json(newUser);
   }
   catch(error) {
-    console.error('Error:', error.message);
-    res.status(400).json({"Error": error.message});
+    // console.error('Error:', error.message);
+    const errors = signUpErrors(error);
+    res.status(200).send({ errors });
   }
 };
 
@@ -40,7 +42,7 @@ exports.signIn = async (req, res) => {
     const user = await Users.findOne({email: userEmail});
 
     if (!user) {
-      res.json({'Error': `L'email '${userEmail}' n'est pas valide`})
+      res.status(200).json({'Error': `Email '${userEmail}' inconnu`})
     }
 
     if (user) {
@@ -48,10 +50,14 @@ exports.signIn = async (req, res) => {
 
       const validPassword = bcrypt.compareSync(userPassword, hash);
 
+      if (!validPassword) {
+        res.status(200).json({'Error': `Le mot de passe ne correspond pas`})
+      }
+
       if (validPassword) {
         const token = createToken(user._id);
         res.cookie('jwtToken', token, { httpOnly: true, maxAge});
-        res.status(201).json(
+        res.status(200).json(
           {
             id: user._id,
             user: user.pseudo
@@ -62,7 +68,8 @@ exports.signIn = async (req, res) => {
     
   } catch (error) {
     console.error('Error:', error.message);
-    res.status(400).json({"Error": error.message});
+    // const errors = signInErrors(error);
+    // res.status(200).send({ errors });
   }
 };
 
