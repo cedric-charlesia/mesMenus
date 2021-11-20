@@ -1,10 +1,31 @@
 const Recipes = require('../models/recipes');
 
-exports.show = async (req, res) => {
+exports.showAll = async (req, res) => {
 
   try {
     const recipes = await Recipes.find();
     res.json(recipes);
+  }
+  catch(error) {
+    console.error('Error:', error.message);
+  }
+};
+
+exports.showOne = async (req, res) => {
+
+  const recipeId = req.params.id;
+
+  try {
+    if (!recipeId.match(/^[0-9a-fA-F]{24}$/))
+      res.json(`L'id ${recipeId} n'est pas valide.`);
+
+    const recipe = await Recipes.findById(recipeId);
+
+    if(!recipe) {
+      res.json(`L'id ${recipeId} n'existe pas.`);
+    } else {
+      res.json(recipe);
+    }
   }
   catch(error) {
     console.error('Error:', error.message);
@@ -40,6 +61,9 @@ exports.update = async (req, res) => {
   const recipeId = req.params.id;
 
   try {
+    if (!recipeId.match(/^[0-9a-fA-F]{24}$/))
+      res.json(`L'id ${recipeId} n'est pas valide.`);
+
       const updatedRecipe = await Recipes.findByIdAndUpdate(recipeId, {
         name: req.body.name,
         image: req.body.image,
@@ -66,6 +90,9 @@ exports.delete = async (req, res) => {
   const recipeId = req.params.id;
 
   try {
+    if (!recipeId.match(/^[0-9a-fA-F]{24}$/))
+      res.json(`L'id ${recipeId} n'est pas valide.`);
+      
       const removedRecipe = await Recipes.findByIdAndRemove(recipeId);
     // console.log(`La recette a bien été supprimée`);
     res.send(`La recette ${recipeId} a bien été supprimée`);
