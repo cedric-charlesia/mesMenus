@@ -1,17 +1,28 @@
 require('dotenv').config();
-const cors = require('cors')
+require('./config/database');
 
 const express = require('express');
-const app = express();
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
-require('./config/database');
-const router = require('./app/router');
+const { trackUser, requireAuth } = require('./app/controllers/middleware/authMiddleware')
 
 const port = process.env.PORT || 5000;
+const app = express();
+const router = require('./app/router');
 
+app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
-app.use(cors());
+app.use(cookieParser());
+
+app.get('*', trackUser);
+app.get('/jwtid', requireAuth, (req, res) => {
+  res.status(200).json({
+    'ID': `${res.locals.user._id}`,
+    'Username': `${res.locals.user.pseudo}`,
+  });
+})
 
 app.use(router);
 

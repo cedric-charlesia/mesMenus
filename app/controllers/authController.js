@@ -50,7 +50,7 @@ exports.signIn = async (req, res) => {
 
       if (validPassword) {
         const token = createToken(user._id);
-        res.cookie('jwt_token', token, { httpOnly: true, maxAge});
+        res.cookie('jwtToken', token, { httpOnly: true, maxAge});
         res.status(201).json(
           {
             id: user._id,
@@ -68,7 +68,7 @@ exports.signIn = async (req, res) => {
 
 exports.logOut = async (req, res) => {
   try {
-    res.cookie('jwt_token', '', {maxAge: 1});
+    res.cookie('jwtToken', '', {maxAge: 1});
     res.redirect('/');
   }
   catch (error) {
