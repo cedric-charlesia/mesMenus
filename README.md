@@ -4,7 +4,7 @@ Application web permettant de gérer les repas de la semaine.
 
 L'idée est venue lorsque j'ai vu ma femme, noter chaque semaine à la main sur une feuille de papier, les menus de la semaine à venir.
 
-Cette application web a pour but lui faciliter la tâche.
+Cette application web a pour but de lui faciliter la tâche.
 
 ## 1 Objectif de l'application :
 
